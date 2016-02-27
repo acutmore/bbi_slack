@@ -1,0 +1,13 @@
+{
+    "name": "acutmore/bbi_slack",
+    "description": "Bitbucket Issues Slack integration",
+    "require": {
+        "gentle/bitbucket-api": "^0.8.0"
+    },
+    "authors": [
+        {
+            "name": "Ashley Cutmore",
+            "email": "ashley.cutmore@gmail.com"
+        }
+    ]
+}
