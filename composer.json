@@ -2,7 +2,8 @@
     "name": "acutmore/bbi_slack",
     "description": "Bitbucket Issues Slack integration",
     "require": {
-        "gentle/bitbucket-api": "^0.8.0"
+        "gentle/bitbucket-api": "^0.8.0",
+        "kriswallsmith/Buzz": "^0.15.0"
     },
     "authors": [
         {
