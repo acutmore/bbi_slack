@@ -11,7 +11,7 @@ $token = $_POST['token'];
 $response_url = $_POST['response_url'];
 
 # Check the token and make sure the request is from our team
-if($token != $bbi_slack_config['slack_token']){
+if(!array_key_exists($token, $bbi_slack_config)){
     die("Invalid token");
 }
 
@@ -33,7 +33,8 @@ Workers::sendMessage('find_issue_worker', array(
   'response_url' => $response_url,
   'page' => $page,
   'title' => trim($text),
-  'command' => $command
+  'command' => $command,
+  'token' => $token,
 ));
 
 # Let user know we are working on it

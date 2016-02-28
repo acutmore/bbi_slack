@@ -10,11 +10,15 @@ $response_url = $_GET['response_url'];
 $page = (int) $_GET['page'];
 $title = $_GET['title'];
 $command = $_GET['command'];
+$token = $_GET['token'];
+
+// Get config
+$config = $bbi_slack_config[$token];
 
 # Connect to Bitbucket
 $oauth_params = array(
-      'client_id'         => $bbi_slack_config['bb_client_id'],
-      'client_secret'     => $bbi_slack_config['bb_client_secret']
+      'client_id'         => $config['bb_client_id'],
+      'client_secret'     => $config['bb_client_secret']
 );
 
 $issues = new Bitbucket\API\Repositories\Issues();
@@ -27,7 +31,7 @@ $pageSize = 10;
 $limit = $pageSize;
 $start = $pageSize * ($page - 1);
 
-$results = $issues->all($bbi_slack_config['bb_account'], $bbi_slack_config['bb_repo'], array(
+$results = $issues->all($config['bb_account'], $config['bb_repo'], array(
     'limit' => $limit,
     'start' => $start,
     'title' => '~' . $title // containing $title
@@ -38,12 +42,12 @@ $data = json_decode($results->getContent());
 $formatted_results = '*Issues containing "'. $title . "\":*\r\n";
 
 function urlForIssue($issue){
-    global $bbi_slack_config;
+    global $config;
 
     return 'https://bitbucket.org/'
-      . $bbi_slack_config['bb_account']
+      . $config['bb_account']
       . '/'
-      . $bbi_slack_config['bb_repo']
+      . $config['bb_repo']
       . '/issues/'
       . $issue;
 }
