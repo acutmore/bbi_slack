@@ -33,8 +33,19 @@ $results = $issues->all($bbi_slack_config['bb_account'], $bbi_slack_config['bb_r
 $data = json_decode($results->getContent());
 $formatted_results = $data->count . " results\r\n\r\n";
 
+function urlForIssue($issue){
+    global $bbi_slack_config; 
+
+    return 'https://bitbucket.org/'
+      . $bbi_slack_config['bb_account']
+      . '/'
+      . $bbi_slack_config['bb_repo']
+      . '/issues/'
+      . $issue;
+}
+
 foreach ($data->issues as $issue){
-    $formatted_results .= ('#' . $issue->local_id . ' ' . $issue->title . "\r\n");
+    $formatted_results .= ('<'.urlForIssue($issue->local_id).'|#'.$issue->local_id.' '.$issue->title.">\r\n");
 }
 
 # Send results to Slack
