@@ -3,13 +3,13 @@
 require 'vendor/autoload.php';
 require 'CONFIG.php';
 
-ignore_user_abort(true);
-set_time_limit(30);
+ignore_user_abort(true); // GET'ing this script triggers it. Client can then close
+set_time_limit(30); // Run for up to 30 seconds
 
 $response_url = $_GET['response_url'];
-$limit = $_GET['limit'];
-$start = $_GET['start'];
+$page = (int) $_GET['page'];
 $title = $_GET['title'];
+$command = $_GET['command'];
 
 # Connect to Bitbucket
 $oauth_params = array(
@@ -23,18 +23,22 @@ $issues->getClient()->addListener(
 );
 
 # Perform the search
+$pageSize = 10;
+$limit = $pageSize;
+$start = $pageSize * ($page - 1);
+
 $results = $issues->all($bbi_slack_config['bb_account'], $bbi_slack_config['bb_repo'], array(
     'limit' => $limit,
     'start' => $start,
-    'title' => $title
+    'title' => '~' . $title // containing $title
 ));
 
 # Parse the JSON
 $data = json_decode($results->getContent());
-$formatted_results = $data->count . " results\r\n\r\n";
+$formatted_results = '*Issues containing "'. $title . "\":*\r\n";
 
 function urlForIssue($issue){
-    global $bbi_slack_config; 
+    global $bbi_slack_config;
 
     return 'https://bitbucket.org/'
       . $bbi_slack_config['bb_account']
@@ -48,10 +52,13 @@ foreach ($data->issues as $issue){
     $formatted_results .= ('<'.urlForIssue($issue->local_id).'|#'.$issue->local_id.' '.$issue->title.">\r\n");
 }
 
+if ((count($data->issues) + $start) < (int) $data->count){
+  // There are more results that could be shown. Append nessesary command to show more
+   $formatted_results .= "type  `" . $command . ' ' . $title . ' page ' . ($page + 1) . "`  for more results" ;
+}
+
 # Send results to Slack
-$jsonPayload = json_encode([
-    text => $formatted_results,
-]);
+$jsonPayload = json_encode([ text => $formatted_results ]);
 
 echo $jsonPayload;
 
