@@ -29,7 +29,7 @@ if ($pagePos){
 }
 
 # Pass search to worker
-Workers::sendMessage('find_issue_worker', array(
+Workers::sendMessage('worker_find_issue', array(
   'response_url' => $response_url,
   'page' => $page,
   'title' => trim($text),

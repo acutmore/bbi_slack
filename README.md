@@ -6,7 +6,7 @@ PHP server for interacting with Bitbucket issues from Slack
 
 ### Setup
 1. Host files on web server with php >= 5.5
-2. Create new Slack command pointing to server.com/path/find_issue.php
+2. Create new Slack command pointing to server.com/path/api_find_issue.php
 3. Add Slack command token and Bitbucket details to CONFIG.php
 
 ### Example Slack Command Usage
