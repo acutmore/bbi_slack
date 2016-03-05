@@ -2,13 +2,21 @@
     "name": "acutmore/bbi_slack",
     "description": "Bitbucket Issues Slack integration",
     "require": {
-        "gentle/bitbucket-api": "^0.8.0",
+        "gentle/bitbucket-api": "dev-ashleycutmore/fix_issue_42#5747c2d0a183ed9e2dc98fe4012f4df32b939139",
         "kriswallsmith/Buzz": "^0.15.0"
     },
+    "repositories": [
+      {
+          "type": "vcs",
+          "url": "git@github.com:acutmore/bitbucket-api-fork",
+          "reference": "ashleycutmore/fix_issue_42"
+      }
+    ],
     "authors": [
         {
             "name": "Ashley Cutmore",
             "email": "ashley.cutmore@gmail.com"
         }
-    ]
+    ],
+    "minimum-stability": "dev"
 }
