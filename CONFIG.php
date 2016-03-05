@@ -17,4 +17,6 @@ $bbi_slack_config = [
     ],
 ];
 
+include 'CONFIG_.php'; // dev enviroment overrides
+
 ?>
