@@ -11,6 +11,15 @@ $page = (int) $_GET['page'];
 $title = $_GET['title'];
 $command = $_GET['command'];
 $token = $_GET['token'];
+$user = $_GET['user'];
+
+if ($page < 1){
+  $page = 1;
+}
+
+if (empty($title)){
+  $title = "";
+}
 
 // Get config
 $config = $bbi_slack_config[$token];
@@ -27,19 +36,47 @@ $issues->getClient()->addListener(
 );
 
 # Perform the search
+$just_open_issues = TRUE;
+
+if (0 === strrpos($title, "*")){
+  $just_open_issues = FALSE;
+  $title = substr($title, 1);
+}
+
 $pageSize = 10;
+
+if (empty($title)){
+  $pageSize = 50;
+}
+
 $limit = $pageSize;
 $start = $pageSize * ($page - 1);
 
-$results = $issues->all($config['bb_account'], $config['bb_repo'], array(
+$search_params = array(
     'limit' => $limit,
     'start' => $start,
-    'title' => '~' . $title // containing $title
-));
+);
+
+if (!empty($title)){
+    $search_params += ['title' => ('~' . $title)]; // containing $title
+}
+
+if (!empty($user)){
+    $search_params += ['responsible' =>  $user];
+}
+
+if ($just_open_issues){
+    $search_params += ['status' =>  ['new', 'open']];
+}
+
+$results = $issues->all($config['bb_account'], $config['bb_repo'], $search_params);
+
 
 # Parse the JSON
 $data = json_decode($results->getContent());
-$formatted_results = '*Issues containing "'. $title . "\":*\r\n";
+$count = $data->count;
+
+$formatted_results = "* $user : $count issues containing \" $title \":*\r\n";
 
 function urlForIssue($issue){
     global $config;
@@ -58,7 +95,7 @@ foreach ($data->issues as $issue){
 
 if ((count($data->issues) + $start) < (int) $data->count){
   // There are more results that could be shown. Append nessesary command to show more
-   $formatted_results .= "type  `" . $command . ' ' . $title . ' page ' . ($page + 1) . "`  for more results" ;
+   $formatted_results .= "type  `$command $title page " . ($page + 1) . "`  for more results" ;
 }
 
 # Send results to Slack
