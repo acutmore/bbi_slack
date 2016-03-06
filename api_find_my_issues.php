@@ -23,7 +23,7 @@ $storage = new Storage('bb_usernames');
 
 if (0 === strpos($text, 'i am ')) {
   $bb_user = substr($text, 5);
-  $storage.put($user_id, $bb_user);
+  $storage->put($user_id, $bb_user);
   exit ("Thank you. I'll do my best to remember that you are '" . $bb_user . "'");
 }
 
