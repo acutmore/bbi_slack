@@ -18,8 +18,8 @@ PHP server for interacting with Bitbucket issues from Slack
 
 ### Extras
 - An empty search will match all issue titles
-- Prepending a search with '*' will return all issues, not just the open ones
-- Appending 'Page X' to a search will return additional pages of results
+- Prepending a search with `*` will return all issues, not just the open ones
+- Appending `Page N` to a search will return additional pages of results
 
 
 ### Acknowledgements
