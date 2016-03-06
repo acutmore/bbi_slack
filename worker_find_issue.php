@@ -99,7 +99,7 @@ if ((count($data->issues) + $start) < (int) $data->count){
 }
 
 # Send results to Slack
-$jsonPayload = json_encode([ text => $formatted_results ]);
+$jsonPayload = json_encode([ 'text' => $formatted_results ]);
 
 echo $jsonPayload;
 
