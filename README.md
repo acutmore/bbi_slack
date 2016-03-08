@@ -1,5 +1,5 @@
 # Bitbucket Issues - Slack Integration Server
-PHP server for interacting with Bitbucket issues from Slack
+PHP server for interacting with Bitbucket issues from Slack.
 
 ### Install
 `composer install`
@@ -12,6 +12,8 @@ PHP server for interacting with Bitbucket issues from Slack
 ### API with examples Slack Command usage
 #### api_find_issue.php
 `\findissue audio bug`  - Returns the open issues containing 'audio bug' in the title
+
+`\findissue #14`  - Returns issue 14
 
 #### api_find_my_issues.php
 `\myissues i am [Bitbucket username]` then `\myissues css` - Returns the open issues with css in the title assigned to that Bitbucket username.

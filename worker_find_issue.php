@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 require 'CONFIG.php';
+require 'util.php';
 
 ignore_user_abort(true); // GET'ing this script triggers it. Client can then close
 set_time_limit(30); // Run for up to 30 seconds
@@ -78,19 +79,8 @@ $count = $data->count;
 
 $formatted_results = "* $user : $count issues containing \" $title \":*\r\n";
 
-function urlForIssue($issue){
-    global $config;
-
-    return 'https://bitbucket.org/'
-      . $config['bb_account']
-      . '/'
-      . $config['bb_repo']
-      . '/issues/'
-      . $issue;
-}
-
 foreach ($data->issues as $issue){
-    $formatted_results .= ('<'.urlForIssue($issue->local_id).'|#'.$issue->local_id.' '.$issue->title.">\r\n");
+    $formatted_results .=  slackUrlForIssue($issue->local_id, $issue->title) . "\r\n";
 }
 
 if ((count($data->issues) + $start) < (int) $data->count){
